@@ -39,6 +39,7 @@ export class Tester {
     // received messages are dropped into an array and returned after the
     // run so further assertions can be done
     pgListen(): Tester {
+        if (!(this.db.client === "pg")) throw new Error("pg notify only works with postgres")
         return this
     }
 
