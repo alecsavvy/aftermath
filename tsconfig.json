@@ -10,8 +10,5 @@
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "nodenext"
   },
-  "include": [
-    "src/**/*.ts",
-    "test/**/*.ts"
-  ]
+  "include": ["src/**/*.ts", "test/**/*.ts"]
 }

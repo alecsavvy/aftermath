@@ -1,5 +1,13 @@
+import Tester from '../src/index';
+
 describe('tests the Tester', () => {
-  test('empty string should result in zero', () => {
-    expect(false).toBe(0);
+  test('simple trigger', async () => {
+    const tester = new Tester();
+    const result = await tester
+      .operation()
+      .sideEffect()
+      .sideEffect()
+      .sideEffect()
+      .run();
   });
 });
