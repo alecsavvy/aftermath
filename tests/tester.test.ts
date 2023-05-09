@@ -10,6 +10,9 @@ describe('tests the Tester', () => {
       .sideEffect((knex) => {
          // select row here
       })
+      .sideEffect((knex) => {
+        // select another row and assert here
+      })
       .run();
   });
 });
