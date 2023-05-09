@@ -3,6 +3,8 @@ import {Result} from './result';
 
 export class Tester {
   db: Knex;
+  op: any;
+  sfx: any[] = [];
 
   // defaults to sqlite in mem if you dont want to stand up db
   // this is just for ease, its on the author to make sure they
@@ -23,14 +25,18 @@ export class Tester {
 
   // initial operation that triggers multiple effects
   // the first one processed against db
-  operation<T>(): Tester {
+  operation<T>(op: (db: Knex) => any): Tester {
+    const startingOperation = op(this.db);
+    this.op = startingOperation;
     return this;
   }
 
   // side effects that happen as a result of the initial operation
   // these are pushed into an array and executed concurrently
   // after the operation is complete
-  sideEffect(): Tester {
+  sideEffect(se: (db: Knex) => any): Tester {
+    const sideEffect = se(this.db);
+    this.sfx.push(sideEffect)
     return this;
   }
 
@@ -56,10 +62,12 @@ export class Tester {
   // 3. gathers all pg listen messages within timeout concurrently
   // 4. assembles all relevant data into the result structure and returns
   async run<T>(): Promise<Result<T>> {
+    const operation = await this.op;
+    const sideEffects = this.sfx.map(async (se) => await se)
     return {
-      operation: undefined,
-      sideEffects: [],
-      pgListens: [],
+      operation,
+      sideEffects,
+      pgListens: [], // not implemented
     };
   }
 }
